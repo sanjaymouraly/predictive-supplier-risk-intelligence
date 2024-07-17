@@ -1,0 +1,56 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sri-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/backend/data/supplier_risk.db}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production-env}
+      - ALLOW_DEMO_MODE=${ALLOW_DEMO_MODE:-true}
+      - RANDOM_SEED=42
+      - AI_PROVIDER=${AI_PROVIDER:-none}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+    volumes:
+      - sri_data:/app/backend/data
+      - sri_artifacts:/app/backend/artifacts
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 120s
+
+  frontend:
+    image: node:20-slim
+    container_name: sri-frontend
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  # Optional PostgreSQL service (activate with: docker compose --profile postgres up -d)
+  postgres:
+    image: postgres:16-alpine
+    container_name: sri-postgres
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sri_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sri_password}
+      POSTGRES_DB: ${POSTGRES_DB:-supplier_risk}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  sri_data:
+  sri_artifacts:
+  pg_data:

@@ -1,0 +1,33 @@
+# Keep the Docker build context small and free of local state.
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+backend/data/
+backend/artifacts/
+
+# --- Node / frontend build output ---
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+.npm/
+
+# --- Generated reports & docs screenshots (not needed at runtime) ---
+docs/
+exports/
+
+# --- VCS / CI / editor / OS ---
+.git/
+.github/
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+*.log
+.DS_Store
+.env
+.env.local

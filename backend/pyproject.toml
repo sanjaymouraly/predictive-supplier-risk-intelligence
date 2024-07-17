@@ -1,0 +1,28 @@
+[project]
+name = "supplier-risk-intelligence-backend"
+authors = [{ name = "Sanjay Mouraly", email = "sanjaymouraly@users.noreply.github.com" }]
+version = "1.0.0"
+description = "Predictive Supplier Risk Intelligence ML & FastAPI Backend"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501", "UP007", "UP045", "UP017"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+check_untyped_defs = false
+
+[project.urls]
+Homepage = "https://github.com/sanjaymouraly/predictive-supplier-risk-intelligence"
+Repository = "https://github.com/sanjaymouraly/predictive-supplier-risk-intelligence"
+Issues = "https://github.com/sanjaymouraly/predictive-supplier-risk-intelligence/issues"
